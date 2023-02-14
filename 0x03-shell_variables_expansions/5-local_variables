@@ -1,2 +1,2 @@
 #!/bin/bash
-echo "Local Variables:"; declare -p | grep '^declare -- .*='; echo "Environment Variables:"; env; echo "Functions:"; declare -F | cut -d ' ' -f 3
+set
