@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Bash script to kill to terminate the script 4-to_infinity_and_beyond
+my_pid=$(pgrep -f 7-highlander)
+kill -9 "$my_pid"
