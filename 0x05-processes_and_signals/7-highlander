@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+# Variable to control the loop
+stop_loop=false
+
+# Function to handle termination
+terminate_loop() {
+    stop_loop=true
+}
+
+# Trap the SIGINT signal (Ctrl + C) to call the terminate_loop function
+trap terminate_loop SIGTERM
+
+# Infinite loop
+while true; do
+    echo "To infinity and beyond"
+    sleep 2
+
+    # Check the stop_loop variable after each iteration
+    if $stop_loop; then
+        echo "I am invincible!!!"
+        stop_loop=false # Reset the stop_loop variable so the loop continues
+    fi
+done
