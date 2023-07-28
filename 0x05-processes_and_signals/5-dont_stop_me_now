@@ -2,4 +2,3 @@
 # Bash script to kill to terminate the script 4-to_infinity_and_beyond
 my_pid=$(pgrep -f 4-to_infinity_and_beyond)
 kill "$my_pid"
-echo "Terminate the infinite: $my_pid"
