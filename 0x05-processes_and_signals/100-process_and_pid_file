@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Creates the file /var/run/myscript.pid containing its PID
+file_path="/var/run/myscript.pid"
+file_pid=$$
+echo "$file_pid" > "$file_path"
+# Function to handle termination of the first loop
+stop_loop1=false
+terminate_loop1() {
+  stop_loop1=true
+}
+# Trap the SIGINT signal (Ctrl + C) to call the terminate_loop1 function
+trap terminate_loop1 SIGINT
+# Function to handle termination of the second loop
+stop_loop2=false
+terminate_loop2() {
+  stop_loop2=true
+  rm "$file_path"
+}
+# Trap the SIGTERM signal to call the terminate_loop2 function
+trap terminate_loop2 SIGTERM
+
+# Infinite loop 1
+while true; do
+  if $stop_loop1; then
+    echo "I hate the kill command"
+    break
+  fi
+  echo "To infinity and beyond"
+  sleep 2
+done
+# Infinite loop 2
+while true; do
+  if $stop_loop2; then
+    echo "Y U no love me?!"
+    break
+  fi
+  echo "To infinity and beyond"
+  sleep 2
+done
