@@ -7,6 +7,7 @@ echo "$file_pid" > "$file_path"
 stop_loop1=false
 terminate_loop1() {
   stop_loop1=true
+  rm "$file_path"
 }
 # Trap the SIGINT signal (Ctrl + C) to call the terminate_loop1 function
 trap terminate_loop1 SIGINT
@@ -18,7 +19,6 @@ terminate_loop2() {
 }
 # Trap the SIGTERM signal to call the terminate_loop2 function
 trap terminate_loop2 SIGTERM
-
 # Infinite loop 1
 while true; do
   if $stop_loop1; then
