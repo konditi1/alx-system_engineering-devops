@@ -1,0 +1,9 @@
+#!/bin/bash
+# Get the Apache log file
+logfile=apache-access.log
+
+# Use awk to extract the IP address and HTTP status code
+IP_HTTP_CODE=$(awk '{print $1,$9}' $logfile)
+
+# Print the IP address and HTTP status code in a list format
+echo "$IP_HTTP_CODE" 
