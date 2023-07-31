@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Get the Apache log file
+logfile=apache-access.log
+# Use awk to extract the IP address and HTTP status code and format them as a list
+awk '{print $1, $9}' "$logfile" | sort | uniq -c | sort -nr
