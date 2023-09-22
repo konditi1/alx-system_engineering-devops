@@ -3,5 +3,5 @@
 package { 'flask':
     ensure   => 'installed',
     version  => '2.1.0',
-    provider => 'pip',
+    provider => 'pip3',
 }
