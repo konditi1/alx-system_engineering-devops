@@ -1,35 +1,33 @@
 #!/usr/bin/env bash
+# Modifies the server block and configures a permanently redirect
+sudo apt update -y
+sudo apt install nginx -y
+sudo service nginx start
+sudo chown -R "$USER":"$USER" /var/www/html
+echo "Hello World!" > /var/www/html/index.nginx-debian.html
 
-# Update the system and install nginx
-sudo apt-get -y update
-sudo apt-get -y install nginx
 
-# Create a custom HTML file for redirection
-echo '<html><head><meta http-equiv="refresh" content="0;URL=https://www.youtube.com/watch?v=QH2-TGUlwu4"></head></html>' | sudo tee /var/www/html/redirect_me.html
+sudo chown -R "$USER":"$USER" /etc/nginx/sites-enabled
+sudo bash -c 'cat <<EOF> /etc/nginx/sites-enabled/default
+	server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+	root /var/www/html;
 
-# Configure the Nginx server block for redirection
-sudo tee /etc/nginx/sites-available/redirect_me <<EOF
-server {
-    listen 80;
-    server_name _;
+	# Add index.php to the list if you are using PHP
+	index index.html index.htm index.nginx-debian.html;
 
-    location /redirect_me {
-        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
-    }
+	server_name _;
 
-    location / {
-        root /var/www/html;
-        index index.html;
-    }
+	location / {
+		# First attempt to serve request as file, then
+		# as directory, then fall back to displaying a 404.
+		try_files \$uri \$uri/ =404;
+	}
+
+	location /redirect_me {
+		return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+	}
 }
-EOF
-
-# Create a symbolic link to enable the configuration
-sudo ln -s /etc/nginx/sites-available/redirect_me /etc/nginx/sites-enabled/
-
-# Remove the default Nginx default site if needed
-sudo rm /etc/nginx/sites-enabled/default
-
-# Test Nginx configuration and restart the server
-sudo nginx -t
-sudo service nginx restart
+EOF'
+sudo service nginx reload
