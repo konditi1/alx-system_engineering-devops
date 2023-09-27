@@ -1,43 +1,67 @@
-# Ensure Nginx is installed and service is running
-class { 'nginx':
-  ensure         => 'installed',
-  enable         => true,
-  service_ensure => 'running',
+# Install Nginx
+package { 'nginx':
+  ensure => 'installed',
 }
 
-# Define a default server block for port 80
-nginx::resource::vhost { 'default_server':
-  ensure      => present,
-  listen_port => 80,
-  server_name => '_',
-  root        => '/var/www/html',
-  index       => ['index.html', 'index.htm', 'index.nginx-debian.html'],
-  access_log  => '/var/log/nginx/access.log',
-  error_log   => '/var/log/nginx/error.log',
+# exec { 'change_ownership':
+#   command => 'sudo chown -R siaw:siaw /var/www/html',
+#   path    => '/usr/bin',
+#   require => Package['nginx'],
+# }
+
+# Create index.html
+file { 'index.html':
+    ensure  => 'file',
+    path    => '/var/www/html/index.html',
+    content => 'Hello World!',
+    require => Package['nginx'],
 }
 
-# Create a custom HTML file for redirection
-file { '/var/www/html/redirect_me.html':
-  ensure  => present,
-  content => '<html><head><meta http-equiv="refresh" content="0;URL=https://www.youtube.com/watch?v=QH2-TGUlwu4"></head></html>',
-  owner   => 'www-data',
-  group   => 'www-data',
-  mode    => '0644',
+# Create 404.html
+file { '404':
+    ensure  => 'file',
+    path    => '/var/www/html/404.html',
+    content => 'Ceci n\'est pas une page',
+    require => Package['nginx'],
 }
 
-# Configure the 301 redirection for /redirect_me
-nginx::resource::location { 'redirect_me':
-  ensure   => present,
-  location => '/redirect_me',
-  server   => 'default_server',
-  proxy    => 'http://www.youtube.com/watch?v=QH2-TGUlwu4',
+# Modify default nginx config
+file { 'default':
+  ensure  => 'file',
+  path    => '/etc/nginx/sites-enabled/default',
+  content => "server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+	root /var/www/html;
+
+	# Add index.php to the list if you are using PHP
+	index index.html index.htm index.nginx-debian.html;
+
+	server_name _;
+
+	location /redirect_me {
+		return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+	}
+	location / {
+		# First attempt to serve request as file, then
+		# as directory, then fall back to displaying a 404.
+		try_files \$uri \$uri/ =404;
+	}
+
+	error_page 404 /404.html;
+	location = /404.html {
+		root /var/www/html;
+		internal;
+	}
+
+}",
+  require => Package['nginx'],
+  notify  => Service['nginx'],
 }
 
-# Create a custom 404 page
-file { '/var/www/html/404.html':
-  ensure  => present,
-  content => 'Ceci n\'est pas une page',
-  owner   => 'www-data',
-  group   => 'www-data',
-  mode    => '0644',
+# Start nginx
+service { 'nginx':
+  ensure  => 'running',
+  enable  => true,
+  require => File['default'],
 }
