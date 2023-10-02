@@ -1,3 +1,4 @@
+# puppet custom http response header
 class nginx_customization {
   file_line { 'add_x_served_by_header':
     path    => '/etc/nginx/sites-enabled/default',
