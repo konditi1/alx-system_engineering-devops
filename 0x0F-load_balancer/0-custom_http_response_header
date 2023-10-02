@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # customizing the HTTP response header
 sudo sed -i "/server_name _;/a \\\tadd_header X-Served-By $hostname;" /etc/nginx/sites-enabled/default
 # restart nginx after making changes
