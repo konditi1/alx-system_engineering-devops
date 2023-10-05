@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+# Function to display subdomain information
+display_subdomain_info() {
+    local domain="$1"
+    local subdomain="$2"
+
+    if [[ -n "$subdomain" ]]; then
+        # When subdomain parameter is provided
+        result=$(dig +short "$subdomain.$domain" | awk '{print}')
+        if [[ -n "$result" ]]; then
+            echo "The subdomain $subdomain is an A record and points to $result"
+        else
+            echo "The subdomain $subdomain does not have an A record."
+        fi
+    else
+        # When only the domain parameter is provided
+        subdomains=("www" "lb-01" "web-01" "web-02")
+        for sub in "${subdomains[@]}"; do
+            result=$(dig +short "$sub.$domain" | awk '{print}')
+            if [[ -n "$result" ]]; then
+                echo "The subdomain $sub is an A record and points to $result"
+            else
+                echo "The subdomain $sub does not have an A record."
+            fi
+        done
+    fi
+}
+
+# Check if the correct number of arguments is provided
+if [[ $# -lt 1 || $# -gt 2 ]]; then
+    echo "Usage: $0 <domain> [<subdomain>]"
+    exit 1
+fi
+
+# Extract arguments
+domain="$1"
+subdomain="$2"
+
+# Call the function to display subdomain information
+display_subdomain_info "$domain" "$subdomain"
