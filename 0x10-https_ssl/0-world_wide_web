@@ -8,9 +8,9 @@ display_subdomain_info() {
         # When subdomain parameter is provided
         result=$(dig +short "$subdomain.$domain" | awk '{print}')
         if [[ -n "$result" ]]; then
-            echo "The subdomain $subdomain is A record and points to $result"
+            echo "The subdomain $subdomain is a A record and points to $result"
         else
-            echo "The subdomain $subdomain does not have A record."
+            echo "The subdomain $subdomain does not have a A record."
         fi
     else
         # When only the domain parameter is provided
@@ -18,9 +18,9 @@ display_subdomain_info() {
         for sub in "${subdomains[@]}"; do
             result=$(dig +short "$sub.$domain" | awk '{print}')
             if [[ -n "$result" ]]; then
-                echo "The subdomain $sub is A record and points to $result"
+                echo "The subdomain $sub is a A record and points to $result"
             else
-                echo "The subdomain $sub does not have A record."
+                echo "The subdomain $sub does not have a A record."
             fi
         done
     fi
