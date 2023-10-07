@@ -2,4 +2,4 @@
 # script that sets the listen port to 80
 sudo sed -i "s/8080/80/g" /etc/nginx/sites-available/default
 sudo service nginx restart
-sudo echo "" > /run/nginx.pid
+echo "" > /run/nginx.pid
