@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 # script that sets the listen port to 80
-sed -i "s/8080/80/g" /etc/nginx/sites-enabled/default
+sed -i 's/[0-9]\+ default_server/80 default_server/' /etc/nginx/sites-enabled/default
 pkill -f --signal 1 "/usr/sbin/nginx"
