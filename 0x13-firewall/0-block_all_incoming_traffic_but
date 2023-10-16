@@ -1,45 +1,12 @@
-#!/bin/bash
-# This script updates the package list
-# installs UFW, configures UFW rules,
-# and enables the firewall.
-# Author: Olwal Olwal
-# Date: October 16, 2023
-
-# Define variables for ports
-SSH_PORT=22
-HTTP_PORT=80
-HTTPS_PORT=443
-
-echo -e "Updating package list\n"
 sudo apt-get update
 
-echo -e "Installing UFW (Uncomplicated Firewall)\n"
 sudo apt-get install -y ufw
 
-echo -e "Configuring UFW...\n"
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
 
-# Set the default rules with error handling
-if sudo ufw default deny incoming && sudo ufw default allow outgoing; then
-    echo "Default rules set successfully"
-else
-    echo "Failed to set default rules"
-    exit 1
-fi
+sudo ufw allow ssh
+sudo ufw allow http
+sudo ufw allow https
 
-# Allow specific ports with error handling
-if sudo ufw allow $SSH_PORT && sudo ufw allow $HTTP_PORT && sudo ufw allow $HTTPS_PORT; then
-    echo "Allowed ports: SSH, HTTP, HTTPS"
-else
-    echo "Failed to allow ports"
-    exit 1
-fi
-
-# Enable the firewall with error handling
-if sudo ufw enable; then
-    echo "Firewall enabled successfully"
-else
-    echo "Failed to enable the firewall"
-    exit 1
-fi
-
-echo -e "Firewall configuration completed.\n"
+sudo ufw enable
