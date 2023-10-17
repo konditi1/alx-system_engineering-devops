@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# update the servers
+sudo apt-get update
+
+# install mysql
+sudo apt-get -y install mysql-server
+
+# start mysql
+sudo service mysql start
