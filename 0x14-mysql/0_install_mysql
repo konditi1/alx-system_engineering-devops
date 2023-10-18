@@ -1,9 +1,24 @@
 #!/usr/bin/env bash
-# update the servers
-sudo apt-get update
+# SELECT user FROM mysql.user;
+sudo wget https://dev.mysql.com/get/mysql-apt-config_0.8.12-1_all.deb
 
-# install mysql
-sudo apt-get -y install mysql-server
+# After the MySQL package has been successfully downloaded, install it:
+sudo dpkg -i mysql-apt-config_0.8.12-1_all.deb
 
-# start mysql
-sudo service mysql start
+# 1.3 Next, select Ubuntu Bionic.
+# After that, select the MySQL Server & Cluster option. Then, select mysql-5.7 and finally select Ok.
+
+# 1.4 Next, update the APT repository:
+sudo apt update
+
+# If you encounter the "signature couldn't be verified"
+# sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 467B942D3A79BD29
+
+# 1.5 Then execute the apt update again:
+#sudo apt update
+
+# To check whether MySQL 5.7 repository has been successfully installed, execute:
+sudo apt-cache policy mysql-server
+
+# 1.6 Install MySQL
+sudo apt install -f mysql-client=5.7* mysql-community-server=5.7* mysql-server=5.7*
