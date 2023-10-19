@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+#  script that accepts one argument
+# check if the user provided an argument
+if [ "$#" -ne 1 ];
+then
+echo "Usage: $0 username missing"
+exit 1
+fi
+# store the provided username in a variable
+user=$1
+# Use the 'sudo' command to run the whoami command as the user
+sudo -u "$user" whoami
