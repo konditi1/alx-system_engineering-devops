@@ -1,15 +1,24 @@
 #!/usr/bin/env bash
 # Stop the Nginx service
-service nginx stop
+# service nginx stop
 
 # Create a backup of the Nginx configuration file
-sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup
+# sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup
+
+# change the owner of nginx
+chown nginx:nginx /etc/nginx/nginx.conf
+
+# Change the permissions on the Nginx configuration file
+chmod 644 /etc/nginx/nginx.conf
 
 # Change the user under which Nginx runs to 'nginx'
 sed -i 's/user www-data;/user nginx;/' /etc/nginx/nginx.conf
 
 # Update the Nginx configuration to listen on all active IPs on port 8080
-sed -i 's/listen 80;/listen 8080;/' /etc/nginx/sites-available/default
+sed -i "s/80/8080/g" /etc/nginx/sites-available/default
+
+# kill the apache2
+pkill apache2
 
 # Restart the Nginx service
-service nginx start
+sudo -u nginx nginx
