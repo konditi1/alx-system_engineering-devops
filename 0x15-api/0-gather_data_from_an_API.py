@@ -11,7 +11,7 @@ def get_employee_todo_progress(employee_id):
     Retrieve and display the TODO list progress for a given employee.
 
     Args:
-        employee_id (int): The ID of the employee for whom to retrieve TODO list progress.
+        employee_id (int): ID of employee for whom to retr TODO list progress.
 
     Returns:
         None
@@ -35,7 +35,8 @@ def get_employee_todo_progress(employee_id):
     done_tasks = sum(1 for task in todo_list if task["completed"])
 
     # Display progress
-    print(f"Employee {employee_name} is done with tasks({done_tasks}/{total_tasks}):")
+    print(f"Employee {employee_name}"
+          f"is done with tasks({done_tasks}/{total_tasks}):")
     for task in todo_list:
         if task["completed"]:
             print(f"\t{task['title']}")
