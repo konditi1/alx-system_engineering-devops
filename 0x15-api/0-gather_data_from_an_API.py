@@ -1,10 +1,9 @@
 #!/usr/bin/python3
-import requests
-import sys
-
 """
     Retrieve and display the TODO list progress for a given employee.
 """
+import requests
+import sys
 
 
 def get_employee_todo_progress(employee_id):
