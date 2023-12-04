@@ -5,6 +5,12 @@ import requests
 
 
 def number_of_subscribers(subreddit):
+    """
+     Retrieves the number of subscribers for a given subreddit.
+
+    :param subreddit: The name of the subreddit.
+    :return:  The number of subscribers, or 0 if the subreddit doesn't exist.
+    """
     # Reddit API endpoint for getting subreddit information
     url = f'https://www.reddit.com/r/{subreddit}/about.json'
 
