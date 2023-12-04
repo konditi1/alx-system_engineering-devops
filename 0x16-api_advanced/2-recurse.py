@@ -1,18 +1,20 @@
 #!/usr/bin/python3
-"""Recursive function that queries the Reddit API and returns a list
-containing the titles of all hot articles for a given subreddit."""
+"""Retrieves the titles of the top 10 hot posts in a given subreddit."""
 import requests
 
 
-def recurse(subreddit, hot_list=None, after=None):
+def recurse(subreddit, hot_list=None, after=None, success_flag=False):
     """
     Retrieves the titles of the top 10 hot posts in a given subreddit.
 
     :param subreddit: The name of the subreddit.
     :param hot_list: The list of hot posts.
     :param after: The parameter for pagination.
+    :param success_flag: A flag to indicate if the request was successful.
     :return: None
     """
+    # Check if the request was successful
+    if success_flag:
     # Initialize hot_list if not provided
     if hot_list is None:
         hot_list = []
@@ -41,10 +43,10 @@ def recurse(subreddit, hot_list=None, after=None):
             after = data['data']['after']
             if after is not None:
                 # Recursively call the function with the new 'after' parameter
-                recurse(subreddit, hot_list, after)
+                recurse(subreddit, hot_list, after, success_flag)
             else:
-                # No more pages, return the accumulated hot_list
-                return hot_list
+                # No more pages, set the success flag to True
+                success_flag = True
         else:
             # No posts found, return None
             return None
@@ -55,3 +57,10 @@ def recurse(subreddit, hot_list=None, after=None):
         # Other error, print the status code and return None
         print(f"Error: {response.status_code}")
         return None
+
+    # If success flag is True, return "OK"
+    if success_flag:
+        return "OK"
+
+    # Otherwise, return the accumulated hot_list
+    return hot_list
