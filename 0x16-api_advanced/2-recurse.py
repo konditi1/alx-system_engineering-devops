@@ -4,22 +4,21 @@ containing the titles of all hot articles for a given subreddit."""
 import requests
 
 
-def recurse(subreddit, hot_list=[]):
+def recurse(subreddit, hot_list=None, after=None):
     """
     Retrieves the titles of the top 10 hot posts in a given subreddit.
 
     :param subreddit: The name of the subreddit.
-    :param hot_list: The list of hot articles.
-    :return: The list of hot articles.
+    :param hot_list: The list of hot posts.
+    :param after: The parameter for pagination.
+    :return: None
     """
     # Initialize hot_list if not provided
     if hot_list is None:
         hot_list = []
-    if hot_list is None:
-        hot_list = []
 
     # Reddit API endpoint for getting hot posts in a subreddit
-    url = f'https://www.reddit.com/r/{subreddit}/hot.json?limit=100'
+    url = f'https://www.reddit.com/r/{subreddit}/hot.json?limit=100&after={after}'
 
     # Set a custom User-Agent to avoid Too Many Requests error
     headers = {'User-Agent': 'Custom User Agent'}
@@ -42,7 +41,7 @@ def recurse(subreddit, hot_list=[]):
             after = data['data']['after']
             if after is not None:
                 # Recursively call the function with the new 'after' parameter
-                recurse(subreddit, hot_list)
+                recurse(subreddit, hot_list, after)
             else:
                 # No more pages, return the accumulated hot_list
                 return hot_list
