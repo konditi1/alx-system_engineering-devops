@@ -13,9 +13,6 @@ def recurse(subreddit, hot_list=None, after=None, success_flag=False):
     :param success_flag: A flag to indicate if the request was successful.
     :return: None
     """
-    # Check if the request was successful
-    if success_flag:
-    # Initialize hot_list if not provided
     if hot_list is None:
         hot_list = []
 
