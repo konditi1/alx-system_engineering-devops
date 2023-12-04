@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-"""Retrieves the titles of the top 10 hot posts in a given subreddit."""
+"""
+Retrieves the titles of the top 10 hot posts in a given subreddit.
+"""
 import requests
 
 
